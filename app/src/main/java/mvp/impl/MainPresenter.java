@@ -1,9 +1,11 @@
 package mvp.impl;
 
 import android.content.Context;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.gy.selectphone.MainActivity;
 import com.google.gson.Gson;
 
 import org.json.JSONException;
@@ -36,7 +38,7 @@ public class MainPresenter extends BasePresenter {
         return mPhone;
     }
 
-    public void searchPhoneInfo(String phone, Context context, View view) {
+    public void searchPhoneInfo(String phone, final Context context, View view, final Handler handler) {
         //判断手机号码是否合法
         if (!PhoneUtils.isMobileNO(phone)) {
             mvpMainView.showToast("手机号码格式不对");
@@ -50,6 +52,12 @@ public class MainPresenter extends BasePresenter {
         } else {
             ToastUtils.show("请先设置网络,再查询", context.getApplicationContext());
             view.setVisibility(View.VISIBLE);
+            view.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(final View view) {
+                    NetWorkUtils.setNetwork(mContext, view, handler);
+                }
+            });
         }
     }
 

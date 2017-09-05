@@ -11,7 +11,7 @@
     <!--输入框提示文字颜色-->
     <color name="hint_color">#bfbfc1</color>
     <!--按钮背景-->
-    <color name="button_background_color">#0093ee</color>
+    <color name="button_background_color">#d4d7d9</color>
     <!--查询结果标题文字颜色-->
     <color name="search_title_color">#4a4a4a</color>
 </resources>

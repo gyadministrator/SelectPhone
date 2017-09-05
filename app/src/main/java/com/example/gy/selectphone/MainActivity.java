@@ -1,8 +1,14 @@
 package com.example.gy.selectphone;
 
 import android.app.ProgressDialog;
+import android.graphics.Color;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -26,6 +32,17 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MainPresenter mainPresenter;
     private ProgressDialog progressDialog;
     private LinearLayout linearLayout;
+    private Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            if (msg.what == 1) {
+                if (NetWorkUtils.checkNetworkState(MainActivity.this)) {
+                    linearLayout.setVisibility(View.GONE);
+                }
+            }
+        }
+    };
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,7 +57,28 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         result_type = (TextView) findViewById(R.id.result_type);
         result_carrier = (TextView) findViewById(R.id.result_carrier);
         btn_search.setOnClickListener(this);
+        input_phone.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                btn_search.setEnabled(false);
+            }
 
+            @Override
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+                if (charSequence.toString().length() == 0) {
+                    btn_search.setEnabled(false);
+                    btn_search.setBackgroundColor(Color.rgb(212, 215, 217));
+                } else {
+                    btn_search.setEnabled(true);
+                    btn_search.setBackgroundColor(Color.rgb(121, 103, 255));
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
         //检查网络
         checkNetwork();
         mainPresenter = new MainPresenter(this);
@@ -49,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        mainPresenter.searchPhoneInfo(input_phone.getText().toString(), this, linearLayout);
+        mainPresenter.searchPhoneInfo(input_phone.getText().toString(), this, linearLayout, handler);
     }
 
     //MvpMainView接口的方法
@@ -93,7 +131,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    NetWorkUtils.setNetwork(MainActivity.this, linearLayout);
+                    NetWorkUtils.setNetwork(MainActivity.this, linearLayout, handler);
                 }
             });
         }
