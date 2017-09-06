@@ -38,7 +38,7 @@ public class MainPresenter extends BasePresenter {
         return mPhone;
     }
 
-    public void searchPhoneInfo(String phone, final Context context, View view, final Handler handler) {
+    public void searchPhoneInfo(String phone, final Context context, View view) {
         //判断手机号码是否合法
         if (!PhoneUtils.isMobileNO(phone)) {
             mvpMainView.showToast("手机号码格式不对");
@@ -55,7 +55,7 @@ public class MainPresenter extends BasePresenter {
             view.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(final View view) {
-                    NetWorkUtils.setNetwork(mContext, view, handler);
+                    NetWorkUtils.setNetwork(mContext);
                 }
             });
         }

@@ -13,6 +13,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.gy.selectphone.MainActivity;
 import com.example.gy.selectphone.R;
 
 /**
@@ -20,13 +21,6 @@ import com.example.gy.selectphone.R;
  */
 
 public class NetWorkUtils {
-    private static ConnectivityManager manager;
-    private static Handler mHandler;
-
-    public Handler getmHandler() {
-        return mHandler;
-    }
-
     /**
      * 检测网络是否连接
      *
@@ -49,9 +43,8 @@ public class NetWorkUtils {
     /**
      * 网络未连接时，调用设置方法
      */
-    public static Handler setNetwork(final Context context, final View view, Handler handler) {
-        Intent intent = null;
-        mHandler = handler;
+    public static void setNetwork(final Context context) {
+        Intent intent;
         /**
          * 判断手机系统的版本！如果API大于10 就是3.0+
          * 因为3.0以上的版本的设置和3.0以下的设置不一样，调用的方法不同
@@ -67,7 +60,5 @@ public class NetWorkUtils {
             intent.setAction("android.intent.action.VIEW");
         }
         context.startActivity(intent);
-        mHandler.sendEmptyMessage(1);
-        return mHandler;
     }
 }

@@ -3,12 +3,12 @@ package com.example.gy.selectphone;
 import android.app.ProgressDialog;
 import android.graphics.Color;
 import android.os.Handler;
-import android.os.Message;
+import android.os.Process;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -32,17 +32,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     private MainPresenter mainPresenter;
     private ProgressDialog progressDialog;
     private LinearLayout linearLayout;
-    private Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            super.handleMessage(msg);
-            if (msg.what == 1) {
-                if (NetWorkUtils.checkNetworkState(MainActivity.this)) {
-                    linearLayout.setVisibility(View.GONE);
-                }
-            }
-        }
-    };
+    private boolean flag = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,7 +77,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 
     @Override
     public void onClick(View view) {
-        mainPresenter.searchPhoneInfo(input_phone.getText().toString(), this, linearLayout, handler);
+        mainPresenter.searchPhoneInfo(input_phone.getText().toString(), this, linearLayout);
     }
 
     //MvpMainView接口的方法
@@ -131,9 +121,43 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
             linearLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
-                    NetWorkUtils.setNetwork(MainActivity.this, linearLayout, handler);
+                    NetWorkUtils.setNetwork(MainActivity.this);
                 }
             });
+        } else {
+            linearLayout.setVisibility(View.GONE);
         }
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        new Handler().postDelayed(new Runnable() {
+            @Override
+            public void run() {
+                checkNetwork();
+            }
+        }, 3000);
+    }
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (!flag) {
+                flag = true;
+                ToastUtils.show("再按一次退出到桌面", this);
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        flag = false;
+                    }
+                }, 2000);
+            } else {
+                finish();
+                Process.killProcess(Process.myPid());
+            }
+            return false;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 }
