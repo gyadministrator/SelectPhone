@@ -4,5 +4,11 @@
     android:id="@+id/activity_logo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg"
-    tools:context="com.example.gy.selectphone.LogoActivity" />
+    tools:context="com.example.gy.selectphone.LogoActivity">
+
+    <TextView
+        android:id="@+id/tv_bg"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@mipmap/bg" />
+</RelativeLayout>

@@ -16,6 +16,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import cn.waps.AppConnect;
+import cn.waps.AppListener;
 import model.Phone;
 import mvp.MvpMainView;
 import mvp.impl.MainPresenter;
@@ -38,6 +40,24 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        AppConnect.getInstance(this).initPopAd(this);
+        // 设置插屏广告无数据时的回调监听（该方法必须在showPopAd之前调用）
+        AppConnect.getInstance(this).setPopAdNoDataListener(new AppListener() {
+
+            @Override
+            public void onPopNoData() {
+                ToastUtils.show("插屏广告暂无可用数据", MainActivity.this);
+            }
+
+        });
+        // 显示插屏广告
+        AppConnect.getInstance(this).showPopAd(this);
+
+        // 互动广告调用方式
+        LinearLayout layout = (LinearLayout) this.findViewById(R.id.AdLinearLayout);
+        AppConnect.getInstance(this).showBannerAd(this, layout);
 
         linearLayout = (LinearLayout) findViewById(R.id.checkNetwork);
         input_phone = (EditText) findViewById(R.id.input_phone);
@@ -153,6 +173,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
                     }
                 }, 2000);
             } else {
+                AppConnect.getInstance(this).close();
                 finish();
                 Process.killProcess(Process.myPid());
             }

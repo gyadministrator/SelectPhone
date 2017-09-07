@@ -27,4 +27,5 @@ dependencies {
     compile 'com.squareup.okhttp3:okhttp:3.8.1'
     compile 'com.google.code.gson:gson:2.8.1'
     compile 'com.alibaba:fastjson:1.2.36'
+    compile files('libs/AppOffer_3.0.2.jar')
 }

@@ -19,3 +19,4 @@
 -keep public interface cn.waps.** {*;}
 -dontwarn cn.waps.**
 
+
