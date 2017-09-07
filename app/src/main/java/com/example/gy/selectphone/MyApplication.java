@@ -16,5 +16,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         AppConnect.getInstance(APP_KEY, APPPID, this);
+        AppConnect.getInstance(this).initPopAd(this);
     }
 }

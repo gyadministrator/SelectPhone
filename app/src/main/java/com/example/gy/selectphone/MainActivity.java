@@ -42,20 +42,6 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-        AppConnect.getInstance(this).initPopAd(this);
-        // 设置插屏广告无数据时的回调监听（该方法必须在showPopAd之前调用）
-        AppConnect.getInstance(this).setPopAdNoDataListener(new AppListener() {
-
-            @Override
-            public void onPopNoData() {
-                Log.e("data", "插屏广告暂无可用数据");
-            }
-
-        });
-        // 显示插屏广告
-        AppConnect.getInstance(this).showPopAd(this);
-
         // 互动广告调用方式
         LinearLayout layout = (LinearLayout) this.findViewById(R.id.AdLinearLayout);
         AppConnect.getInstance(this).showBannerAd(this, layout);
